@@ -1,142 +1,89 @@
-# 🚀 daily-arXiv-ai-enhanced
+# daily-arXiv-ai-enhanced
 
-> [!CAUTION]
-> If your jurisdiction has censorship requirements for academic data, run this code with caution; any secondary distribution version must remove the entrance accessible to China and fulfill the content review obligations, otherwise all legal consequences will be borne by the downstream.
+> Your auto-updating, AI-summarized arXiv digest — zero servers, free on GitHub Pages.
 
+[![Live Demo](https://img.shields.io/badge/live%20demo-online-brightgreen)](https://wlsgur073.github.io/daily-arXiv-ai-enhanced/)
+[![Daily run](https://github.com/wlsgur073/daily-arXiv-ai-enhanced/actions/workflows/run.yml/badge.svg)](https://github.com/wlsgur073/daily-arXiv-ai-enhanced/actions/workflows/run.yml)
+[![License: Modified Apache 2.0](https://img.shields.io/badge/license-Modified%20Apache%202.0-blue.svg)](./LICENSE)
+[![Last commit](https://img.shields.io/github/last-commit/wlsgur073/daily-arXiv-ai-enhanced)](https://github.com/wlsgur073/daily-arXiv-ai-enhanced/commits/main)
+![Powered by DeepSeek](https://img.shields.io/badge/AI-DeepSeek-4D6BFE)
 
-This innovative tool transforms how you stay updated with arXiv papers by combining automated crawling with AI-powered summarization.
+**daily-arXiv-ai-enhanced** automatically crawls new arXiv papers every day, summarizes them with an LLM, and publishes a clean, searchable web digest — all on free GitHub infrastructure. This is an English-language fork tailored to my own research interests.
 
+👉 **Live site: https://wlsgur073.github.io/daily-arXiv-ai-enhanced/**
 
-## ✨ Key Features
+<p align="center">
+  <a href="https://wlsgur073.github.io/daily-arXiv-ai-enhanced/">
+    <img src="css/screenshot-placeholder.svg" alt="daily-arXiv-ai-enhanced preview" width="760">
+  </a>
+</p>
+<!-- TODO: replace css/screenshot-placeholder.svg with a real screenshot of the live site -->
 
-🎯 **Zero Infrastructure Required**
-- Leverages GitHub Actions and Pages - no server needed
-- Completely free to deploy and use
+## ✨ Features
 
-🤖 **Smart AI Summarization**
-- Daily paper crawling with DeepSeek-powered summaries
-- Cost-effective: Only ~0.2 CNY per day
+- 🎯 **Zero infrastructure** — runs entirely on GitHub Actions + Pages. No server, free to host.
+- 🤖 **AI summarization** — daily arXiv crawl with DeepSeek-powered summaries (TL;DR, motivation, method, result, conclusion). Cost depends on your own LLM API usage.
+- 💫 **Smart reading experience** — personalized highlighting based on your interests, desktop & mobile support, local (private) preference storage, and flexible date-range filtering.
+- 🧩 **SKILL system** — plug-and-play modules for customizing paper filtering (see [`SKILL/SKILL.md`](./SKILL/SKILL.md)).
+- ⚙️ **Preference export** — one-click copy of your keywords and authors in **Settings** to reuse or share with the SKILL system.
 
-💫 **Smart Reading Experience**
-- Personalized paper highlighting based on your interests
-- Cross-device compatibility (desktop & mobile)
-- Local preference storage for privacy
-- Flexible date range filtering
+## 📚 What this fork tracks
 
-🧩 **SKILL System**
-- Plug-and-play skill modules for customizing paper filtering
+By default this deployment crawls **`cs.CL, cs.SE, cs.HC, cs.AI, cs.IR, cs.CR, cs.LG, cs.MA`** and summarizes papers in **English** using **DeepSeek (`deepseek-v4-pro`)**. Change any of these at any time through the repository **Variables** (see [Configuration](#️-configuration)).
 
-⚙️ **Easy Preference Export & Integration**
-- One-click copy in Settings to export your keywords and authors configuration
-- Seamlessly combine exported preferences with SKILL for reproducible and shareable setups
+## 🚀 Quick start
 
-👉 **[Try it now!](https://dw-dengwei.github.io/daily-arXiv-ai-enhanced/)** - No installation required
+Deploy your own copy in a few minutes — no server required.
 
+1. **Fork** this repository to your account.
+2. Open **Settings → Secrets and variables → Actions**.
+3. Under **Secrets**, add your LLM credentials (and optional extras) — see [Configuration](#️-configuration).
+4. Under **Variables**, set your categories, summary language, model, and Git author info.
+5. Open the **Actions** tab, enable workflows, and run **arXiv-daily-ai-enhanced** once to test (it can take a while). After that it runs automatically every day.
+6. Enable **GitHub Pages**: **Settings → Pages → Build and deployment**, set **Source = "Deploy from a branch"** and **Branch = `main` / `(root)`**. After a few minutes your site is live at `https://<your-username>.github.io/daily-arXiv-ai-enhanced/`.
 
+> **Notes**
+> - `permissions: contents: write` is already declared in the workflow, so the daily job can push its results — no extra repository-permission setup needed.
+> - If you use a DeepSeek **thinking** model (e.g. `deepseek-v4-pro`), the pipeline automatically disables thinking mode so structured (function-calling) summarization works correctly.
 
-https://github.com/user-attachments/assets/b25712a4-fb8d-484f-863d-e8da6922f9d7
+## ⚙️ Configuration
 
+**Secrets** — *Settings → Secrets and variables → Actions → Secrets*
 
+| Secret | Required | Description |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | ✅ | Your LLM API key (e.g. from [platform.deepseek.com](https://platform.deepseek.com)) |
+| `OPENAI_BASE_URL` | ✅ | Your provider's API base URL (e.g. `https://api.deepseek.com`) |
+| `ACCESS_PASSWORD` | optional | Set to password-protect your published page |
+| `TOKEN_GITHUB` | optional | A GitHub token to raise API rate limits when fetching code-repo info for papers |
 
+**Variables** — *Settings → Secrets and variables → Actions → Variables*
 
-# How to use
-This repo will daily crawl arXiv papers about **cs.CV, cs.GR, cs.CL and cs.AI**, and use **DeepSeek** to summarize the papers in **Chinese**.
-If you wish to crawl other arXiv categories, use other LLMs, or other languages, please follow the instructions.
-Otherwise, you can directly use this repo in https://dw-dengwei.github.io/daily-arXiv-ai-enhanced/. Please star it if you like :)
+| Variable | Example | Description |
+| --- | --- | --- |
+| `CATEGORIES` | `cs.CL, cs.AI, cs.LG` | arXiv categories to crawl (comma-separated) |
+| `LANGUAGE` | `English` | Language for the AI summaries |
+| `MODEL_NAME` | `deepseek-v4-pro` | LLM model id |
+| `EMAIL` | `you@example.com` | Git author email for the automated commits |
+| `NAME` | `your-name` | Git author name for the automated commits |
 
-**Instructions:**
-1. Fork this repo to your own account
-2. Go to: your-own-repo -> Settings -> Secrets and variables -> Actions
-3. Go to Secrets. Secrets are encrypted and used for sensitive data
-4. Create two repository secrets named `OPENAI_API_KEY` and `OPENAI_BASE_URL`, and input corresponding values.
-5. [Optional] Set a password in `secrets.ACCESS_PASSWORD` if you do not wish others to access your page. (see https://github.com/dw-dengwei/daily-arXiv-ai-enhanced/pull/64)
-6. Go to Variables. Variables are shown as plain text and are used for non-sensitive data
-7. Create the following repository variables:
-   1. `CATEGORIES`: separate the categories with ",", such as "cs.CL, cs.CV"
-   2. `LANGUAGE`: such as "Chinese" or "English"
-   3. `MODEL_NAME`: such as "deepseek-chat"
-   4. `EMAIL`: your email for push to GitHub
-   5. `NAME`: your name for push to GitHub
-8. Go to your-own-repo -> Actions -> arXiv-daily-ai-enhanced
-9. You can manually click **Run workflow** to test if it works well (it may take about one hour). By default, this action will automatically run every day. You can modify it in `.github/workflows/run.yml`
-10. Set up GitHub pages: Go to your own repo -> Settings -> Pages. In `Build and deployment`, set `Source="Deploy from a branch"`, `Branch="main", "/(root)"`. Wait for a few minutes, go to https://\<username\>.github.io/daily-arXiv-ai-enhanced/. Please see this [issue](https://github.com/dw-dengwei/daily-arXiv-ai-enhanced/issues/14) for more precise instructions.
+## 🧠 How it works
 
-# Plans
-See https://github.com/users/dw-dengwei/projects/3
+- **`main` branch** — the static site (HTML/CSS/JS) and configuration.
+- **`data` branch** — the daily crawled and AI-enhanced papers (JSONL + Markdown).
+- The site is served by **GitHub Pages** from `main` and fetches each day's papers from the `data` branch at runtime via `raw.githubusercontent.com` (configured in [`js/data-config.js`](./js/data-config.js)).
+- A scheduled **GitHub Actions** workflow ([`.github/workflows/run.yml`](./.github/workflows/run.yml)) runs daily: **crawl arXiv → AI-summarize → commit results to the `data` branch**.
 
-# Contributors
-Thanks to the following special contributors for contributing code, discovering bugs, and sharing useful ideas for this project!!!
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top">
-        <a href="https://github.com/JianGuanTHU"><img src="https://avatars.githubusercontent.com/u/44895708?v=4" width="100px;" alt="JianGuanTHU"/><br /><sub><b>JianGuanTHU</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://github.com/Chi-hong22"><img src="https://avatars.githubusercontent.com/u/75403952?v=4" width="100px;" alt="Chi-hong22"/><br /><sub><b>Chi-hong22</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://github.com/chaozg"><img src="https://avatars.githubusercontent.com/u/69794131?v=4" width="100px;" alt="chaozg"/><br /><sub><b>chaozg</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://github.com/quantum-ctrl"><img src="https://avatars.githubusercontent.com/u/16505311?v=4" width="100px;" alt="quantum-ctrl"/><br /><sub><b>quantum-ctrl</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://github.com/Zhao2z"><img src="https://avatars.githubusercontent.com/u/141019403?v=4" width="100px;" alt="Zhao2z"/><br /><sub><b>Zhao2z</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://github.com/eclipse0922"><img src="https://avatars.githubusercontent.com/u/6214316?v=4" width="100px;" alt="eclipse0922"/><br /><sub><b>eclipse0922</b></sub></a><br />
-      </td>
-    </tr>
+## 🧩 SKILL system
 
+The repository ships a plug-and-play SKILL module for programmatic paper filtering. See [`SKILL/SKILL.md`](./SKILL/SKILL.md) for usage, and combine it with the keyword/author preferences you export from the **Settings** page for reproducible, shareable setups.
 
-  </tbody>
-  <tbody>
-   <tr>
-      <td align="center" valign="top">
-        <a href="https://github.com/xuemian168"><img src="https://avatars.githubusercontent.com/u/38741078?v=4" width="100px;" alt="xuemian168"/><br /><sub><b>xuemian168</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://github.com/Lrrrr549"><img src="https://avatars.githubusercontent.com/u/71866027?v=4" width="100px;" alt="Lrrrr549"/><br /><sub><b>Lrrrr549</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://github.com/AinzRimuru"><img src="https://avatars.githubusercontent.com/u/59441476?v=4" width="100px;" alt="AinzRimuru"/><br /><sub><b>AinzRimuru</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://github.com/fengxueguiren"><img src="https://avatars.githubusercontent.com/u/153522370?v=4" width="100px;" alt="fengxueguiren"/><br /><sub><b>fengxueguiren</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://github.com/zerocpp"><img src="https://avatars.githubusercontent.com/u/2630297?v=4" width="100px;" alt="fengxueguiren"/><br /><sub><b>zerocpp</b></sub></a><br />
-      </td>
-   </tr>
-  </tbody>
-</table>
+## 📄 License
 
-# Acknowledgement
-We sincerely thank the following individuals and organizations for their promotion and support!!!
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top">
-        <a href="https://x.com/GitHub_Daily/status/1930610556731318781"><img src="https://pbs.twimg.com/profile_images/1660876795347111937/EIo6fIr4_400x400.jpg" width="100px;" alt="Github_Daily"/><br /><sub><b>Github_Daily</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://x.com/aigclink/status/1930897858963853746"><img src="https://pbs.twimg.com/profile_images/1729450995850027008/gllXr6bh_400x400.jpg" width="100px;" alt="AIGCLINK"/><br /><sub><b>AIGCLINK</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://www.ruanyifeng.com/blog/2025/06/weekly-issue-353.html"><img src="https://avatars.githubusercontent.com/u/905434" width="100px;" alt="Ruan Yifeng's Blog"/><br /><sub><b>Ruan Yifeng's Blog <br> Tech Enthusiast Weekly <br> (Issue No. 353)</b></sub></a><br />
-      </td>
-      <td align="center" valign="top">
-        <a href="https://hellogithub.com/periodical/volume/111"><img src="https://github.com/user-attachments/assets/eff6b6dd-0323-40c4-9db6-444a51bbc80a" width="100px;" alt="HelloGitHub Issue No. 111"/><br /><sub><b>HelloGitHub<br> Monthly Issue No. 111</b></sub></a><br />
-      </td>
-    </tr>
-  </tbody>
-</table>
+Distributed under the **Modified Apache License 2.0** — see [`LICENSE`](./LICENSE).
 
+> ⚠️ This tool accesses and processes third-party content from arXiv. You are solely responsible for complying with arXiv's terms of use and any laws applicable in your jurisdiction. See `LICENSE` §9 (Disclaimer for Third-Party Content).
 
-# Star history
+## 🙏 Acknowledgements
 
-[![Stargazers over time](https://starchart.cc/dw-dengwei/daily-arXiv-ai-enhanced.svg?variant=adaptive)](https://starchart.cc/dw-dengwei/daily-arXiv-ai-enhanced)
-
-# Buy me a coffee
-[here](./buy-me-a-coffee/README.md)
+This project is a **modified fork** of [**dw-dengwei/daily-arXiv-ai-enhanced**](https://github.com/dw-dengwei/daily-arXiv-ai-enhanced) (Modified Apache License 2.0); files have been changed from the original. Huge thanks to the original author **Wei Deng** and the upstream contributors for building the foundation this fork is based on.
