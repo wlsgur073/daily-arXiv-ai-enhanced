@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchGitHubStats() {
   try {
-    const response = await fetch('https://api.github.com/repos/dw-dengwei/daily-arXiv-ai-enhanced');
+    const response = await fetch('https://api.github.com/repos/wlsgur073/daily-arXiv-ai-enhanced');
     const data = await response.json();
     const starCount = data.stargazers_count;
     const forkCount = data.forks_count;
@@ -671,8 +671,8 @@ function getPreferredLanguage() {
   if (browserLang.startsWith('zh')) {
     return 'Chinese';
   }
-  // Default to Chinese for all other languages
-  return 'Chinese';
+  // Default to English for all other languages
+  return 'English';
 }
 
 // Function to select the best available language for a date
