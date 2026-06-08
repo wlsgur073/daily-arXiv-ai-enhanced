@@ -167,7 +167,13 @@ def process_single_item(chain, item: Dict, language: str) -> Dict:
 
 def process_all_items(data: List[Dict], model_name: str, language: str, max_workers: int) -> List[Dict]:
     """并行处理所有数据项"""
-    llm = ChatOpenAI(model=model_name).with_structured_output(Structure, method="function_calling")
+    # deepseek-v4-* models default to "thinking" mode, which does NOT support
+    # forced tool_choice (function calling). Disable thinking for deepseek models
+    # so structured output via function calling works.
+    extra = {}
+    if "deepseek" in model_name.lower():
+        extra["extra_body"] = {"thinking": {"type": "disabled"}}
+    llm = ChatOpenAI(model=model_name, **extra).with_structured_output(Structure, method="function_calling")
     print('Connect to:', model_name, file=sys.stderr)
     
     prompt_template = ChatPromptTemplate.from_messages([
