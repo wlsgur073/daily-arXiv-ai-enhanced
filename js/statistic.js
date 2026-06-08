@@ -47,7 +47,7 @@ async function fetchGitHubStats() {
     document.getElementById('starCount').textContent = starCount;
     document.getElementById('forkCount').textContent = forkCount;
   } catch (error) {
-    console.error('获取GitHub统计数据失败:', error);
+    console.error('Failed to fetch GitHub statistics:', error);
     document.getElementById('starCount').textContent = '?';
     document.getElementById('forkCount').textContent = '?';
   }
@@ -56,11 +56,11 @@ async function fetchGitHubStats() {
 function toggleDatePicker() {
   const datePicker = document.getElementById('datePickerModal');
   datePicker.classList.toggle('active');
-  
+
   if (datePicker.classList.contains('active')) {
     document.body.style.overflow = 'hidden';
-    
-    // 重新初始化日期选择器以确保它反映最新的可用日期
+
+    // Reinitialize the date picker to ensure it reflects the latest available dates
     if (flatpickrInstance) {
       flatpickrInstance.setDate(currentDate, false);
     }
@@ -70,36 +70,36 @@ function toggleDatePicker() {
 }
 
 function initEventListeners() {
-  // 只允许通过日历按钮打开日期选择器
+  // Only allow opening the date picker via the calendar button
   const calendarButton = document.getElementById('calendarButton');
   calendarButton.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleDatePicker();
   });
-  
-  // 点击模态框背景时关闭
+
+  // Close when clicking the modal background
   const datePickerModal = document.querySelector('.date-picker-modal');
   datePickerModal.addEventListener('click', (event) => {
     if (event.target === datePickerModal) {
       toggleDatePicker();
     }
   });
-  
-  // 阻止日期选择器内容区域的点击事件冒泡
+
+  // Prevent click events inside the date picker content area from bubbling up
   const datePickerContent = document.querySelector('.date-picker-content');
   datePickerContent.addEventListener('click', (e) => {
     e.stopPropagation();
   });
-  
+
   document.getElementById('dateRangeMode').addEventListener('change', toggleRangeMode);
-  
-  // 添加侧边栏关闭按钮事件
+
+  // Add the sidebar close button event
   const closeButton = document.querySelector('.close-sidebar');
   if (closeButton) {
     closeButton.addEventListener('click', closeSidebar);
   }
-  
-  // 点击侧边栏外部时关闭侧边栏
+
+  // Close the sidebar when clicking outside of it
   document.addEventListener('click', (event) => {
     const sidebar = document.getElementById('paperSidebar');
     const isClickInside = sidebar.contains(event.target);
@@ -145,7 +145,7 @@ function selectLanguageForDate(date, preferredLanguage = null) {
 
 async function fetchAvailableDates() {
   try {
-    // 从 data 分支获取文件列表
+    // Fetch the file list from the data branch
     const fileListUrl = DATA_CONFIG.getDataUrl('assets/file-list.txt');
     const response = await fetch(fileListUrl);
     if (!response.ok) {
@@ -182,7 +182,7 @@ async function fetchAvailableDates() {
 
     return availableDates;
   } catch (error) {
-    console.error('获取可用日期失败:', error);
+    console.error('Failed to fetch available dates:', error);
   }
 }
 
@@ -193,35 +193,35 @@ function initDatePicker() {
     flatpickrInstance.destroy();
   }
   
-  // 创建可用日期的映射，用于禁用无效日期
+  // Create a map of available dates, used to disable invalid dates
   const enabledDatesMap = {};
   availableDates.forEach(date => {
     enabledDatesMap[date] = true;
   });
-  
-  // 配置 Flatpickr
+
+  // Configure Flatpickr
   flatpickrInstance = flatpickr(datepickerInput, {
     inline: true,
     dateFormat: "Y-m-d",
     defaultDate: availableDates[0],
     enable: [
       function(date) {
-        // 只启用有效日期
-        const dateStr = date.getFullYear() + "-" + 
-                        String(date.getMonth() + 1).padStart(2, '0') + "-" + 
+        // Only enable valid dates
+        const dateStr = date.getFullYear() + "-" +
+                        String(date.getMonth() + 1).padStart(2, '0') + "-" +
                         String(date.getDate()).padStart(2, '0');
         return !!enabledDatesMap[dateStr];
       }
     ],
     onChange: function(selectedDates, dateStr) {
       if (isRangeMode && selectedDates.length === 2) {
-        // 处理日期范围选择
+        // Handle date range selection
         const startDate = formatDateForAPI(selectedDates[0]);
         const endDate = formatDateForAPI(selectedDates[1]);
         loadPapersByDateRange(startDate, endDate);
         toggleDatePicker();
       } else if (!isRangeMode && selectedDates.length === 1) {
-        // 处理单个日期选择
+        // Handle single date selection
         const selectedDate = formatDateForAPI(selectedDates[0]);
         if (availableDates.includes(selectedDate)) {
           loadPapersByDateRange(selectedDate, selectedDate);
@@ -230,8 +230,8 @@ function initDatePicker() {
       }
     }
   });
-  
-  // 隐藏日期输入框
+
+  // Hide the date input field
   const inputElement = document.querySelector('.flatpickr-input');
   if (inputElement) {
     inputElement.style.display = 'none';
@@ -253,7 +253,7 @@ function toggleRangeMode() {
 }
 
 async function loadPapersByDateRange(startDate, endDate) {
-  // 获取日期范围内的所有有效日期
+  // Get all valid dates within the date range
   const validDatesInRange = availableDates.filter(date => {
     return date >= startDate && date <= endDate;
   });
@@ -280,32 +280,32 @@ async function loadPapersByDateRange(startDate, endDate) {
   `;
   
   try {
-    // 加载所有日期的论文数据
+    // Load paper data for all dates
     const allPaperData = {};
-    allPapersData = []; // 重置全局论文数据
-    
+    allPapersData = []; // Reset the global paper data
+
     for (const date of validDatesInRange) {
       const selectedLanguage = selectLanguageForDate(date);
-      // 从 data 分支获取数据文件
+      // Fetch the data file from the data branch
       const dataUrl = DATA_CONFIG.getDataUrl(`data/${date}_AI_enhanced_${selectedLanguage}.jsonl`);
       const response = await fetch(dataUrl);
       const text = await response.text();
       const dataPapers = parseJsonlData(text, date);
-      
-      // 合并数据
+
+      // Merge the data
       Object.keys(dataPapers).forEach(category => {
         if (!allPaperData[category]) {
           allPaperData[category] = [];
         }
         allPaperData[category] = allPaperData[category].concat(dataPapers[category]);
-        // 将论文添加到全局数组
+        // Add the papers to the global array
         allPapersData = allPapersData.concat(dataPapers[category]);
       });
     }
-    
+
     paperData = allPaperData;
 
-    // 提取所有论文标题
+    // Extract all paper titles
     const allTitle = [];
     Object.keys(paperData).forEach(category => {
       paperData[category].forEach(paper => {
@@ -313,34 +313,34 @@ async function loadPapersByDateRange(startDate, endDate) {
       });
     });
 
-    // 提取关键词并进行总结
+    // Extract keywords and summarize them
     const extractKeywords = (text) => {
-      // 移除特殊字符和多余空格
+      // Remove special characters and extra whitespace
       const cleanText = text.replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
-      
-      // 使用 compromise 进行文本处理
+
+      // Use compromise for text processing
       const doc = nlp(cleanText);
-      
-      // 提取名词短语和重要词汇
+
+      // Extract noun phrases and important terms
       const terms = new Set();
-      
-      // 提取名词短语
+
+      // Extract noun phrases
       doc.match('#Noun+').forEach(match => {
         const phrase = match.text().toLowerCase();
-        if (phrase.split(' ').length <= 3) { // 最多3个词的短语
+        if (phrase.split(' ').length <= 3) { // Phrases of at most 3 words
           terms.add(phrase);
         }
       });
-      
-      // 提取形容词+名词组合
+
+      // Extract adjective + noun combinations
       doc.match('(#Adjective+ #Noun+)').forEach(match => {
         const phrase = match.text().toLowerCase();
         if (phrase.split(' ').length <= 3) {
           terms.add(phrase);
         }
       });
-      
-      // 定义停用词
+
+      // Define stop words
       const stopWords = new Set([
         'the', 'is', 'at', 'which', 'and', 'or', 'in', 'to', 'for', 'of', 
         'with', 'by', 'on', 'this', 'that', 'our', 'method', 'based', 
@@ -353,62 +353,62 @@ async function loadPapersByDateRange(startDate, endDate) {
         'ai', 'ml', 'dl'
       ]);
       
-      // 过滤停用词和短词
+      // Filter out stop words and short words
       const filteredTerms = Array.from(terms).filter(term => {
         const words = term.split(' ');
-        return words.every(word => word.length > 2) && 
+        return words.every(word => word.length > 2) &&
                !words.every(word => stopWords.has(word));
       });
-      
-      // 统计词频
+
+      // Count term frequencies
       const termFreq = {};
       filteredTerms.forEach(term => {
         termFreq[term] = (termFreq[term] || 0) + 1;
-        // 给多词短语更高的权重
+        // Give multi-word phrases a higher weight
         if (term.includes(' ')) {
           termFreq[term] *= 1.5;
         }
       });
-      
-      // 计算 TF 值（词频）
+
+      // Compute TF (term frequency) values
       const tfScores = {};
       const totalTerms = Object.values(termFreq).reduce((a, b) => a + b, 0);
       Object.entries(termFreq).forEach(([term, freq]) => {
         tfScores[term] = freq / totalTerms;
       });
-      
-      // 按 TF 值排序并返回前10个关键词/短语
+
+      // Sort by TF value and return the top 10 keywords/phrases
       return Object.entries(tfScores)
         .sort(([,a], [,b]) => b - a)
         .slice(0, 10)
         .map(([term]) => term);
     };
 
-    // 处理所有摘要
+    // Process all summaries
     const allKeywords = new Map();
-    const keywordTrends = new Map(); // 添加关键词趋势数据结构
-    
-    // 初始化日期数据结构
+    const keywordTrends = new Map(); // Add the keyword trend data structure
+
+    // Initialize the per-date data structure
     validDatesInRange.forEach(date => {
       keywordTrends.set(date, new Map());
     });
-    
-    // 按日期统计关键词
+
+    // Count keywords by date
     allTitle.forEach((abstract, index) => {
       const date = validDatesInRange[Math.floor(index / (allTitle.length / validDatesInRange.length))];
       const keywords = extractKeywords(abstract);
-      
+
       keywords.forEach(keyword => {
-        // 更新总体统计
+        // Update the overall statistics
         allKeywords.set(keyword, (allKeywords.get(keyword) || 0) + 1);
-        
-        // 更新日期维度统计
+
+        // Update the per-date statistics
         const dateStats = keywordTrends.get(date);
         dateStats.set(keyword, (dateStats.get(keyword) || 0) + 1);
       });
     });
 
-    // 生成关键词云数据
+    // Generate the keyword cloud data
     const keywordCloudData = Array.from(allKeywords.entries())
       .filter(([, count]) => count > 1)
       .sort(([,a], [,b]) => b - a)
@@ -418,19 +418,19 @@ async function loadPapersByDateRange(startDate, endDate) {
         size: Math.max(12, Math.min(50, count * 3))
       }));
 
-    // 准备折线图数据
+    // Prepare the line chart data
     const top10Keywords = keywordCloudData.slice(0, 10).map(d => d.text);
     const trendData = top10Keywords.map(keyword => {
       return {
         keyword: keyword,
         values: Array.from(keywordTrends.entries()).map(([date, stats]) => ({
-          date: new Date(date + 'T00:00:00Z'),  // 确保日期被正确解析，添加时间部分
+          date: new Date(date + 'T00:00:00Z'),  // Ensure the date is parsed correctly by adding a time part
           count: stats.get(keyword) || 0
-        })).sort((a, b) => a.date - b.date)  // 确保数据按日期排序
+        })).sort((a, b) => a.date - b.date)  // Ensure the data is sorted by date
       };
     });
 
-    // 创建可视化展示
+    // Create the visualization
     container.innerHTML = `
       <div class="statistics-section">
         <h2>
@@ -465,10 +465,10 @@ async function loadPapersByDateRange(startDate, endDate) {
       </div>
     `;
 
-    // 只在日期范围模式下创建趋势图
+    // Only create the trend chart in date range mode
     if (startDate !== endDate) {
-      // 创建折线图
-      const margin = {top: 20, right: 180, bottom: 80, left: 60}; // 增加底部边距以适应更长的日期标签
+      // Create the line chart
+      const margin = {top: 20, right: 180, bottom: 80, left: 60}; // Increase the bottom margin to fit longer date labels
       const width = document.getElementById('trendChart').offsetWidth - margin.left - margin.right;
       const height = 400 - margin.top - margin.bottom;
 
@@ -479,7 +479,7 @@ async function loadPapersByDateRange(startDate, endDate) {
         .append('g')
           .attr('transform', `translate(${margin.left},${margin.top})`);
 
-      // 设置比例尺
+      // Set up the scales
       const x = d3.scaleTime()
         .domain(d3.extent(validDatesInRange, d => new Date(d)))
         .range([0, width]);
@@ -488,12 +488,12 @@ async function loadPapersByDateRange(startDate, endDate) {
         .domain([0, d3.max(trendData, d => d3.max(d.values, v => v.count))])
         .range([height, 0]);
 
-      // 创建颜色比例尺，使用更柔和的颜色
+      // Create the color scale using softer colors
       const color = d3.scaleOrdinal()
-        .range(['#4e79a7', '#f28e2c', '#59a14f', '#e15759', '#76b7b2', 
+        .range(['#4e79a7', '#f28e2c', '#59a14f', '#e15759', '#76b7b2',
                 '#edc949', '#af7aa1', '#ff9da7', '#9c755f', '#bab0ab']);
 
-      // 添加X轴网格线
+      // Add the X-axis gridlines
       svg.append('g')
         .attr('class', 'grid')
         .attr('transform', `translate(0,${height})`)
@@ -504,7 +504,7 @@ async function loadPapersByDateRange(startDate, endDate) {
           .tickSize(-height)
           .tickFormat(''));
 
-      // 添加Y轴网格线
+      // Add the Y-axis gridlines
       svg.append('g')
         .attr('class', 'grid')
         .style('stroke-dasharray', '3,3')
@@ -513,29 +513,29 @@ async function loadPapersByDateRange(startDate, endDate) {
           .tickSize(-width)
           .tickFormat(''));
 
-      // 添加一个函数来确定合适的日期格式
+      // Add a function to determine an appropriate date format
       function determineDateFormat(dates) {
         const startDate = new Date(dates[0]);
         const endDate = new Date(dates[dates.length - 1]);
-        
-        // 检查是否跨年
+
+        // Check whether it spans multiple years
         const sameYear = startDate.getFullYear() === endDate.getFullYear();
-        // 检查是否在同一个月
+        // Check whether it is within the same month
         const sameMonth = sameYear && startDate.getMonth() === endDate.getMonth();
-        
+
         if (sameMonth) {
-          return d3.timeFormat("%d"); // 只显示日
+          return d3.timeFormat("%d"); // Show the day only
         } else if (sameYear) {
-          return d3.timeFormat("%m-%d"); // 显示月-日
+          return d3.timeFormat("%m-%d"); // Show month-day
         } else {
-          return d3.timeFormat("%Y-%m-%d"); // 显示完整日期
+          return d3.timeFormat("%Y-%m-%d"); // Show the full date
         }
       }
 
-      // 获取日期格式化函数
+      // Get the date formatting function
       const dateFormat = determineDateFormat(validDatesInRange);
-      
-      // 添加X轴
+
+      // Add the X-axis
       svg.append('g')
         .attr('class', 'x-axis')
         .attr('transform', `translate(0,${height})`)
@@ -550,7 +550,7 @@ async function loadPapersByDateRange(startDate, endDate) {
         .attr("dy", ".15em")
         .attr("transform", "rotate(-45)");
 
-      // 添加Y轴
+      // Add the Y-axis
       svg.append('g')
         .attr('class', 'y-axis')
         .call(d3.axisLeft(y)
@@ -559,7 +559,7 @@ async function loadPapersByDateRange(startDate, endDate) {
         .style("font-size", "12px")
         .style("fill", "#666");
 
-      // 添加Y轴标题
+      // Add the Y-axis title
       svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 0 - margin.left)
@@ -570,7 +570,7 @@ async function loadPapersByDateRange(startDate, endDate) {
         .style("font-size", "12px")
         .text("Frequency");
 
-      // 添加X轴标题，显示年份和月份（如果被省略的话）
+      // Add the X-axis title, showing the year and month (when omitted from the labels)
       const startDate = new Date(validDatesInRange[0]);
       const endDate = new Date(validDatesInRange[validDatesInRange.length - 1]);
       let xAxisTitle = "";
@@ -592,25 +592,25 @@ async function loadPapersByDateRange(startDate, endDate) {
           .text(xAxisTitle);
       }
 
-      // 加粗坐标轴线条
+      // Thicken the axis lines
       svg.selectAll('.x-axis path, .y-axis path, .x-axis line, .y-axis line')
         .style('stroke', '#666')
         .style('stroke-width', '1.5px');
 
-      // 定义面积生成器
+      // Define the area generator
       const area = d3.area()
         .x(d => x(d.date))
         .y0(height)
         .y1(d => y(d.count))
-        .curve(d3.curveBasis); // 使用更平滑的曲线
+        .curve(d3.curveBasis); // Use a smoother curve
 
-      // 定义线条生成器
+      // Define the line generator
       const line = d3.line()
         .x(d => x(d.date))
         .y(d => y(d.count))
-        .curve(d3.curveBasis); // 使用相同的平滑曲线
+        .curve(d3.curveBasis); // Use the same smooth curve
 
-      // 添加渐变定义
+      // Add the gradient definitions
       const gradient = svg.append("defs")
         .selectAll("linearGradient")
         .data(trendData)
@@ -632,7 +632,7 @@ async function loadPapersByDateRange(startDate, endDate) {
         .attr("stop-color", d => color(d.keyword))
         .attr("stop-opacity", 0.05);
 
-      // 绘制面积
+      // Draw the areas
       const areas = svg.selectAll('.area')
         .data(trendData)
         .enter()
@@ -642,7 +642,7 @@ async function loadPapersByDateRange(startDate, endDate) {
           .style('fill', (d, i) => `url(#gradient-${i})`)
           .style('opacity', 0.7);
 
-      // 绘制折线
+      // Draw the lines
       const paths = svg.selectAll('.line')
         .data(trendData)
         .enter()
@@ -654,7 +654,7 @@ async function loadPapersByDateRange(startDate, endDate) {
           .style('stroke-width', 2)
           .style('opacity', 0.8);
 
-      // 添加图例
+      // Add the legend
       const legend = svg.selectAll('.legend')
         .data(trendData)
         .enter()
@@ -676,35 +676,35 @@ async function loadPapersByDateRange(startDate, endDate) {
         .style('font-size', '12px')
         .style('alignment-baseline', 'middle');
 
-      // 添加交互效果
+      // Add interactive effects
       legend.style('cursor', 'pointer')
         .on('mouseover', function(event, d) {
           const keyword = d.keyword;
-          
-          // 降低其他线条和区域的透明度
+
+          // Lower the opacity of the other lines and areas
           areas.style('opacity', 0.1);
           paths.style('opacity', 0.1);
-          
-          // 高亮当前选中的线条和区域
+
+          // Highlight the currently selected line and area
           svg.selectAll('.area')
             .filter(p => p.keyword === keyword)
             .style('opacity', 0.9);
-          
+
           svg.selectAll('.line')
             .filter(p => p.keyword === keyword)
             .style('opacity', 1)
             .style('stroke-width', 3);
         })
         .on('mouseout', function() {
-          // 恢复原始状态
+          // Restore the original state
           areas.style('opacity', 0.7);
           paths.style('opacity', 0.8)
             .style('stroke-width', 2);
         });
     }
-    
+
   } catch (error) {
-    console.error('加载论文数据失败:', error);
+    console.error('Failed to load paper data:', error);
     container.innerHTML = `
       <div class="loading-container">
         <p>Loading data fails. Please retry.</p>
@@ -752,10 +752,10 @@ function parseJsonlData(jsonlText, date) {
         conclusion: paper.AI && paper.AI.conclusion ? paper.AI.conclusion : ''
       });
     } catch (error) {
-      console.error('解析JSON行失败:', error, line);
+      console.error('Failed to parse JSON line:', error, line);
     }
   });
-  
+
   return result;
 }
 
@@ -768,22 +768,22 @@ function formatDate(dateString) {
   });
 }
 
-// 修改 showRelatedPapers 函数中生成论文卡片的部分
+// The part of the showRelatedPapers function that generates the paper cards
 function showRelatedPapers(keyword) {
     const sidebar = document.getElementById('paperSidebar');
     const selectedKeywordElement = document.getElementById('selectedKeyword');
     const relatedPapersContainer = document.getElementById('relatedPapers');
-    
-    // 更新关键词显示
+
+    // Update the keyword display
     selectedKeywordElement.textContent = 'Keyword: ' + keyword;
-    
-    // 查找包含关键词的论文
+
+    // Find papers that contain the keyword
     const relatedPapers = allPapersData.filter(paper => {
         const searchText = (paper.title + ' ' + paper.summary).toLowerCase();
         return searchText.includes(keyword.toLowerCase());
     });
-    
-    // 生成相关论文的HTML
+
+    // Generate the HTML for the related papers
     const papersHTML = relatedPapers.map((paper, index) => `
         <div class="paper-card">
             <div class="paper-number">${index + 1}</div>
@@ -796,16 +796,16 @@ function showRelatedPapers(keyword) {
         </div>
     `).join('');
     
-    // 更新侧边栏内容
-    relatedPapersContainer.innerHTML = relatedPapers.length > 0 
-        ? papersHTML 
+    // Update the sidebar content
+    relatedPapersContainer.innerHTML = relatedPapers.length > 0
+        ? papersHTML
         : '<p>No related papers found.</p>';
-    
-    // 显示侧边栏
+
+    // Show the sidebar
     sidebar.classList.add('active');
 }
 
-// 添加新函数：关闭侧边栏
+// New function: close the sidebar
 function closeSidebar() {
   const sidebar = document.getElementById('paperSidebar');
   sidebar.classList.remove('active');

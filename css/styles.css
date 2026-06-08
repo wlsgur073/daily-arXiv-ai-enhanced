@@ -1,4 +1,4 @@
-/* 基础样式 */
+/* Base styles */
 :root {
   --primary-color: #667eea;
   --secondary-color: #764ba2;
@@ -19,7 +19,7 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --transition: all 0.2s ease;
-  --match-highlight: rgba(255, 223, 77, 0.22); /* 更明显的浅黄色背景 */
+  --match-highlight: rgba(255, 223, 77, 0.22); /* More noticeable light yellow background */
   --gold-color: #ffd700;
   --gold-dark: #d4af37;
   --gold-gradient: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
@@ -103,7 +103,7 @@ button {
   background-color: rgba(102, 126, 234, 0.1);
 }
 
-/* 视图控制按钮样式 */
+/* View control button styles */
 .view-controls {
   display: flex;
   align-items: center;
@@ -137,14 +137,14 @@ button {
   font-weight: 500;
 }
 
-/* 布局容器 */
+/* Layout container */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* 页头 */
+/* Header */
 header {
   position: sticky;
   top: 0;
@@ -299,7 +299,7 @@ header {
   color: var(--text-color);
 }
 
-/* 类别导航栏 */
+/* Category navigation bar */
 .category-nav {
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
@@ -309,7 +309,7 @@ header {
   z-index: 10;
   display: flex;
   flex-direction: column;
-  align-items: center; /* 居中显示 */
+  align-items: center; /* Center alignment */
 }
 
 .category-nav::-webkit-scrollbar {
@@ -319,10 +319,10 @@ header {
 .category-label-container {
   display: flex;
   align-items: center;
-  max-width: 1440px; /* 与main容器的max-width相同 */
+  max-width: 1440px; /* Same max-width as the main container */
   width: 100%;
-  padding: 10px 24px 5px 24px; /* 减少上下内边距 */
-  margin: 0 auto; /* 居中显示 */
+  padding: 10px 24px 5px 24px; /* Reduced top and bottom padding */
+  margin: 0 auto; /* Center alignment */
   position: relative;
 }
 
@@ -332,21 +332,21 @@ header {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-right: 8px; /* 减少右侧间距 */
+  margin-right: 8px; /* Reduced right spacing */
   white-space: nowrap;
-  min-width: 90px; /* 减少宽度从120px到90px */
-  letter-spacing: 0.3px; /* 减少字母间距 */
-  font-size: 14px; /* 减小字体大小 */
+  min-width: 90px; /* Reduced width from 120px to 90px */
+  letter-spacing: 0.3px; /* Reduced letter spacing */
+  font-size: 14px; /* Reduced font size */
   text-transform: uppercase;
-  opacity: 1; /* 增加不透明度 */
+  opacity: 1; /* Increased opacity */
   position: relative;
   z-index: 1;
-  padding-left: 3px; /* 减少左侧内边距 */
+  padding-left: 3px; /* Reduced left padding */
 }
 
-/* 删除装饰线的CSS规则 */
+/* CSS rules to remove the decorative line */
 .category-nav-label::after, .keyword-nav-label::after {
-  content: none; /* 移除装饰线 */
+  content: none; /* Remove the decorative line */
 }
 
 .category-scroll {
@@ -356,10 +356,10 @@ header {
   -ms-overflow-style: none;
   scrollbar-width: none;
   width: 100%;
-  justify-content: flex-start; /* 改为左对齐 */
-  flex-wrap: nowrap; /* 禁止换行 */
-  white-space: nowrap; /* 确保内容不会换行 */
-  /* 添加鼠标滚轮横向滚动支持 */
+  justify-content: flex-start; /* Changed to left alignment */
+  flex-wrap: nowrap; /* Prevent wrapping */
+  white-space: nowrap; /* Ensure content does not wrap */
+  /* Add mouse wheel horizontal scroll support */
   overflow-y: hidden;
 }
 
@@ -370,10 +370,10 @@ header {
   -ms-overflow-style: none;
   scrollbar-width: none;
   width: 100%;
-  justify-content: flex-start; /* 改为左对齐 */
-  flex-wrap: nowrap; /* 禁止换行 */
-  white-space: nowrap; /* 确保内容不会换行 */
-  /* 添加鼠标滚轮横向滚动支持 */
+  justify-content: flex-start; /* Changed to left alignment */
+  flex-wrap: nowrap; /* Prevent wrapping */
+  white-space: nowrap; /* Ensure content does not wrap */
+  /* Add mouse wheel horizontal scroll support */
   overflow-y: hidden;
 }
 
@@ -426,10 +426,10 @@ header {
 .filter-label-container {
   display: flex;
   align-items: center;
-  max-width: 1440px; /* 与main容器的max-width相同 */
+  max-width: 1440px; /* Same max-width as the main container */
   width: 100%;
-  padding: 10px 24px 5px 24px; /* 与category标签容器保持一致 */
-  margin: 0 auto; /* 居中显示 */
+  padding: 10px 24px 5px 24px; /* Consistent with the category label container */
+  margin: 0 auto; /* Center alignment */
   position: relative;
 }
 
@@ -498,7 +498,7 @@ header {
   box-shadow: var(--shadow-sm);
 }
 
-/* 作者按钮样式 */
+/* Author button styles */
 .author-button {
   background-color: rgba(102, 126, 234, 0.08); /* primary tint */
   color: var(--primary-color);
@@ -517,7 +517,7 @@ header {
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
 }
 
-/* 关键词按钮样式 */
+/* Keyword button styles */
 .keyword-button {
   background-color: rgba(167, 139, 250, 0.10); /* accent tint */
   color: var(--accent-color);
@@ -547,7 +547,7 @@ header {
   color: #fff;
 }
 
-/* 标签动画效果 */
+/* Tag animation effect */
 .keyword-tag.tag-appear,
 .category-button.tag-appear {
   animation: tagAppear 0.3s ease;
@@ -584,16 +584,16 @@ header {
   }
 }
 
-/* 主要内容区域 */
+/* Main content area */
 main {
   flex: 1;
-  padding: 0 24px 24px 24px; /* 修改上边距为0，保持左右下边距 */
+  padding: 0 24px 24px 24px; /* Set top padding to 0, keep left, right, and bottom padding */
   max-width: 1440px;
   margin: 0 auto;
   width: 100%;
 }
 
-/* 论文容器 - 网格视图 */
+/* Paper container - grid view */
 .paper-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -602,14 +602,14 @@ main {
   align-items: flex-start;
 }
 
-/* 论文容器 - 列表视图 */
+/* Paper container - list view */
 .paper-container.list-view {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* 论文卡片 - 网格视图 */
+/* Paper card - grid view */
 .paper-card {
   background-color: var(--card-bg-color);
   border-radius: var(--radius-md);
@@ -651,13 +651,13 @@ main {
   overflow: visible;
 }
 
-/* 作者列表项样式 */
+/* Author list item styles */
 .paper-card-authors .author-item {
   display: inline;
   white-space: nowrap;
 }
 
-/* 作者省略号样式 */
+/* Author ellipsis styles */
 .paper-card-authors .author-ellipsis {
   display: inline;
   color: var(--text-tertiary);
@@ -720,7 +720,7 @@ main {
   font-weight: 500;
 }
 
-/* 论文卡片 - 列表视图 */
+/* Paper card - list view */
 .list-view .paper-card {
   flex-direction: row;
   align-items: center;
@@ -745,7 +745,7 @@ main {
   flex: 0 0 auto;
 }
 
-/* 论文详情模态框 */
+/* Paper details modal */
 .paper-modal {
   display: none;
   position: fixed;
@@ -917,7 +917,7 @@ main {
   font-weight: 600;
 }
 
-/* 日期选择器样式 */
+/* Date picker styles */
 .date-picker-modal {
   position: fixed;
   top: 0;
@@ -1243,29 +1243,29 @@ input:checked + .toggle-slider:before {
   
   .category-scroll {
     padding: 8px 16px;
-    max-width: 100%; /* 在移动端占满宽度 */
-    justify-content: flex-start; /* 在移动端左对齐 */
-    flex-wrap: nowrap; /* 确保不换行 */
+    max-width: 100%; /* Full width on mobile */
+    justify-content: flex-start; /* Left alignment on mobile */
+    flex-wrap: nowrap; /* Ensure no wrapping */
   }
-  
+
   .filter-scroll {
     padding: 0 16px 8px;
     margin-top: -4px;
     gap: 6px;
-    max-width: 100%; /* 在移动端占满宽度 */
-    justify-content: flex-start; /* 在移动端左对齐 */
-    flex-wrap: nowrap; /* 确保不换行 */
+    max-width: 100%; /* Full width on mobile */
+    justify-content: flex-start; /* Left alignment on mobile */
+    flex-wrap: nowrap; /* Ensure no wrapping */
   }
-  
+
   .category-button, .keyword-tag {
     padding: 4px 10px;
     font-size: 12px;
     border-radius: 14px;
-    margin: 0 2px; /* 调整为水平边距 */
+    margin: 0 2px; /* Adjusted to horizontal margins */
   }
-  
+
   main {
-    padding: 0 16px 16px 16px; /* 调整与类别/关键词区域保持一致 */
+    padding: 0 16px 16px 16px; /* Adjusted to stay consistent with the category/keyword area */
     padding-left: 10px;
   }
   
@@ -1318,7 +1318,7 @@ input:checked + .toggle-slider:before {
   }
 }
 
-/* 加载状态 */
+/* Loading state */
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -1344,7 +1344,7 @@ input:checked + .toggle-slider:before {
   }
 }
 
-/* 页脚 */
+/* Footer */
 footer {
   background-color: #fff;
   border-top: 1px solid var(--border-color);
@@ -1360,7 +1360,7 @@ footer {
   font-size: 14px;
 }
 
-/* 添加对论文索引号和详情部分的样式 */
+/* Styles for the paper index number and details section */
 .paper-card-index {
   font-weight: 600;
   color: white;
@@ -1407,7 +1407,7 @@ footer {
   color: var(--text-secondary);
 }
 
-/* 在列表视图中调整索引显示 */
+/* Adjust the index display in list view */
 .list-view .paper-card-index {
   position: relative;
   top: auto;
@@ -1417,7 +1417,7 @@ footer {
   margin-bottom: auto;
 }
 
-/* 设置模态框样式 */
+/* Settings modal styles */
 .settings-modal {
   position: fixed;
   top: 0;
@@ -1634,14 +1634,14 @@ footer {
   color: white;
   font-size: 13px;
   padding: 4px 10px;
-  margin: 4px 2px; /* 添加边距与其他按钮一致 */
+  margin: 4px 2px; /* Add margins consistent with other buttons */
 }
 
 .clear-button:hover {
   background-color: var(--text-secondary);
 }
 
-/* 类别标签和关键词标签样式 */
+/* Category tag and keyword tag styles */
 .category-label {
   font-weight: 600;
   color: var(--text-color);
@@ -1654,7 +1654,7 @@ footer {
   margin-right: 6px;
   white-space: nowrap;
   margin-left: 0;
-  min-width: 90px; /* 减少宽度从120px到90px，与Category标签保持一致 */
+  min-width: 90px; /* Reduced width from 120px to 90px, consistent with the Category label */
 }
 
 .author-label {
@@ -1663,7 +1663,7 @@ footer {
   margin-right: 6px;
   white-space: nowrap;
   margin-left: 0;
-  min-width: 90px; /* 与Category和Keyword标签保持一致 */
+  min-width: 90px; /* Consistent with the Category and Keyword labels */
 }
 
 .logic-indicator {
@@ -1690,7 +1690,7 @@ footer {
   text-transform: none;
 }
 
-  padding-left: 3px; /* 减少左侧内边距 */
+  padding-left: 3px; /* Reduced left padding */
 }
 
 
@@ -1724,7 +1724,7 @@ footer {
   background: var(--gradient-primary-hover);
 }
 
-/* 高亮样式 */
+/* Highlight styles */
 .keyword-highlight {
   background-color: rgba(255, 215, 0, 0.15);
   border-radius: 3px;
@@ -1769,7 +1769,7 @@ footer {
   border: 1px solid rgba(255, 215, 0, 0.25);
 }
 
-/* 添加一个高亮动画效果 */
+/* Add a highlight animation effect */
 @keyframes highlightPulse {
   0% {
     box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.3);
@@ -1787,14 +1787,14 @@ footer {
   animation: highlightPulse 1.5s ease-in-out infinite;
 }
 
-/* 在弹窗中也保持高亮的良好显示 */
+/* Keep highlights well displayed in the modal as well */
 .paper-modal-body .keyword-highlight,
 .paper-modal-body .author-highlight {
   display: inline;
   line-height: inherit;
 }
 
-/* 当同时存在关键词和作者高亮时，在模态窗口中显示一个提示 */
+/* When both keyword and author highlights exist, show a hint in the modal window */
 .paper-modal-body .highlight-info {
   margin-top: 10px;
   font-size: 12px;
@@ -1815,7 +1815,7 @@ footer {
   border-radius: 2px;
 }
 
-/* 匹配论文卡片的高亮样式 */
+/* Highlight styles for matched paper cards */
 .paper-card.matched-paper {
   box-shadow: 0 0 0 2px var(--gold-color), var(--shadow-md);
   background-color: var(--match-highlight);
@@ -1830,12 +1830,12 @@ footer {
   border: 1px solid rgba(255, 215, 0, 0.5);
 }
 
-/* 移除这个 ::after 星星，只使用 .match-badge */
+/* Remove this ::after star, use only .match-badge */
 .paper-card.matched-paper::after {
   display: none;
 }
 
-/* 保留原始的关键帧动画，因为其他地方可能会用到 */
+/* Keep the original keyframe animation, since it may be used elsewhere */
 @keyframes goldPulse {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
@@ -1848,12 +1848,12 @@ footer {
   }
 }
 
-/* 为匹配论文添加列表视图的特殊样式 */
+/* Add special list view styles for matched papers */
 .list-view .paper-card.matched-paper {
   border-left: 4px solid var(--gold-color);
 }
 
-/* 优化移动端显示效果 */
+/* Optimize the display on mobile */
 @media (max-width: 768px) {
   .paper-card.matched-paper::after {
     top: -4px;
@@ -1864,7 +1864,7 @@ footer {
   }
 }
 
-/* 匹配论文在详情页中的样式 */
+/* Styles for matched papers on the details page */
 .matched-paper-details {
   position: relative;
   border-left: 4px solid var(--gold-color);
@@ -1913,7 +1913,7 @@ footer {
   }
 }
 
-/* 匹配标记样式 */
+/* Match badge styles */
 .match-badge {
   position: absolute;
   top: -6px;
@@ -1967,7 +1967,7 @@ footer {
   }
 }
 
-/* 匹配信息样式 */
+/* Match info styles */
 .match-info {
   display: flex;
   align-items: flex-start;
@@ -2048,7 +2048,7 @@ footer {
   }
 }
 
-/* 在移动端优化高亮样式 */
+/* Optimize highlight styles on mobile */
 @media (max-width: 768px) {
   .keyword-highlight, .author-highlight {
     padding: 0 1px;
@@ -2174,7 +2174,7 @@ footer {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999; /* 确保在模态框之上，但在展开的PDF之下 */
+  z-index: 999; /* Ensure it is above the modal but below the expanded PDF */
 }
 
 .pdf-container.expanded {
@@ -2208,7 +2208,7 @@ footer {
   margin: 0 auto;
 }
 
-/* 回到顶部按钮样式 */
+/* Back to top button styles */
 .back-to-top {
   position: fixed;
   bottom: 30px;
@@ -2255,7 +2255,7 @@ footer {
   transform: translateY(-1px);
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
   .back-to-top {
     bottom: 20px;

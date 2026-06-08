@@ -8,24 +8,24 @@ class ArxivSpider(scrapy.Spider):
         super().__init__(*args, **kwargs)
         categories = os.environ.get("CATEGORIES", "cs.CV")
         categories = categories.split(",")
-        # 保存目标分类列表，用于后续验证
+        # Save the target category list for later validation
         self.target_categories = set(map(str.strip, categories))
         self.start_urls = [
             f"https://arxiv.org/list/{cat}/new" for cat in self.target_categories
-        ]  # 起始URL（计算机科学领域的最新论文）
+        ]  # Start URLs (latest papers in computer science fields)
 
-    name = "arxiv"  # 爬虫名称
-    allowed_domains = ["arxiv.org"]  # 允许爬取的域名
+    name = "arxiv"  # Spider name
+    allowed_domains = ["arxiv.org"]  # Domains allowed to be crawled
 
     def parse(self, response):
-        # 提取每篇论文的信息
+        # Extract the information of each paper
         anchors = []
         for li in response.css("div[id=dlpage] ul li"):
             href = li.css("a::attr(href)").get()
             if href and "item" in href:
                 anchors.append(int(href.split("item")[-1]))
 
-        # 遍历每篇论文的详细信息
+        # Iterate over the detailed information of each paper
         for paper in response.css("dl dt"):
             paper_anchor = paper.css("a[name^='item']::attr(name)").get()
             if not paper_anchor:
@@ -35,41 +35,41 @@ class ArxivSpider(scrapy.Spider):
             if anchors and paper_id >= anchors[-1]:
                 continue
 
-            # 获取论文ID
+            # Get the paper ID
             abstract_link = paper.css("a[title='Abstract']::attr(href)").get()
             if not abstract_link:
                 continue
-                
+
             arxiv_id = abstract_link.split("/")[-1]
-            
-            # 获取对应的论文描述部分 (dd元素)
+
+            # Get the corresponding paper description part (dd element)
             paper_dd = paper.xpath("following-sibling::dd[1]")
             if not paper_dd:
                 continue
-            
-            # 提取论文分类信息 - 在subjects部分
+
+            # Extract paper category information - in the subjects part
             subjects_text = paper_dd.css(".list-subjects .primary-subject::text").get()
             if not subjects_text:
-                # 如果找不到主分类，尝试其他方式获取分类
+                # If the primary category is not found, try another way to get the categories
                 subjects_text = paper_dd.css(".list-subjects::text").get()
-            
+
             if subjects_text:
-                # 解析分类信息，通常格式如 "Computer Vision and Pattern Recognition (cs.CV)"
-                # 提取括号中的分类代码
+                # Parse the category information, usually formatted like "Computer Vision and Pattern Recognition (cs.CV)"
+                # Extract the category codes inside the parentheses
                 categories_in_paper = re.findall(r'\(([^)]+)\)', subjects_text)
-                
-                # 检查论文分类是否与目标分类有交集
+
+                # Check whether the paper's categories intersect with the target categories
                 paper_categories = set(categories_in_paper)
                 if paper_categories.intersection(self.target_categories):
                     yield {
                         "id": arxiv_id,
-                        "categories": list(paper_categories),  # 添加分类信息用于调试
+                        "categories": list(paper_categories),  # Add category information for debugging
                     }
                     self.logger.info(f"Found paper {arxiv_id} with categories {paper_categories}")
                 else:
                     self.logger.debug(f"Skipped paper {arxiv_id} with categories {paper_categories} (not in target {self.target_categories})")
             else:
-                # 如果无法获取分类信息，记录警告但仍然返回论文（保持向后兼容）
+                # If the category information cannot be obtained, log a warning but still return the paper (keep backward compatibility)
                 self.logger.warning(f"Could not extract categories for paper {arxiv_id}, including anyway")
                 yield {
                     "id": arxiv_id,

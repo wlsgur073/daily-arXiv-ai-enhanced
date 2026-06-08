@@ -1,4 +1,4 @@
-/* 设置页面专用样式 */
+/* Styles specific to the settings page */
 .settings-page {
   padding: 24px;
   max-width: 800px;
@@ -279,7 +279,7 @@
   opacity: 0.7;
 }
 
-/* 标签动画效果 */
+/* Tag animation effect */
 .tag-appear {
   animation: tagAppear 0.3s ease;
 }
@@ -326,7 +326,7 @@
   }
 }
 
-/* 覆盖默认按钮样式 */
+/* Override default button styles */
 .settings-actions {
   display: flex;
   justify-content: flex-end;
@@ -364,7 +364,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
   .settings-page {
     padding: 16px;
